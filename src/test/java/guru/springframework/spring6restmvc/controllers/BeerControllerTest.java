@@ -23,8 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@SpringBootTest
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
-//    @Autowired
-//    BeerController beerController;
 
     @Autowired
     MockMvc mockMvc;
