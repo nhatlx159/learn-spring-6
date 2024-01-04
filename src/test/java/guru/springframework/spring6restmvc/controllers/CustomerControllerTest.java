@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.controllers;
 
+import guru.springframework.spring6restmvc.model.Customer;
 import guru.springframework.spring6restmvc.services.CustomerService;
 import guru.springframework.spring6restmvc.services.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -26,19 +27,27 @@ class CustomerControllerTest {
     CustomerService customerService;
 
     CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl();
+
     @Test
     void listCustomer() throws Exception {
 
         given(customerService.listCustomer()).willReturn(customerServiceImpl.listCustomer());
         mockMvc.perform(get("/api/v1/customer")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(3)));
     }
 
     @Test
-    void getCustomerById() {
+    void getCustomerById() throws Exception {
+        Customer testCustomer = customerServiceImpl.listCustomer().get(0);
+        given(customerService.getCustomerId(testCustomer.getId())).willReturn(testCustomer);
+
+        mockMvc.perform(get("/api/v1/" + testCustomer.getId())
+
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
