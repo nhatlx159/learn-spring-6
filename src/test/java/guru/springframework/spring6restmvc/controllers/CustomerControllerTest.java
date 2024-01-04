@@ -44,10 +44,12 @@ class CustomerControllerTest {
         Customer testCustomer = customerServiceImpl.listCustomer().get(0);
         given(customerService.getCustomerId(testCustomer.getId())).willReturn(testCustomer);
 
-        mockMvc.perform(get("/api/v1/" + testCustomer.getId())
-
+        mockMvc.perform(get("/api/v1/customer/" + testCustomer.getId())
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(testCustomer.getId().toString())))
+                .andExpect(jsonPath("$.name", is(testCustomer.getName())));
     }
 
     @Test
